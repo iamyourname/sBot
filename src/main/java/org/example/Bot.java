@@ -26,6 +26,7 @@ public class Bot extends TelegramLongPollingBot {
         System.out.println(
                 user.getUserName() + "(" + user.getId() + "): " + msg.getText()
         );
+        sendText(id,msg.getText());
 
     }
 
