@@ -1,11 +1,16 @@
 package org.example;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot extends TelegramLongPollingBot {
+
+    final static Logger logger = LoggerFactory.getLogger(Bot.class);
+
 
     @Override
     public String getBotUsername() {
@@ -26,6 +31,7 @@ public class Bot extends TelegramLongPollingBot {
         System.out.println(
                 user.getUserName() + "(" + user.getId() + "): " + msg.getText()
         );
+        logger.info(user.getUserName() + "(" + user.getId() + "): " + msg.getText());
         sendText(id,msg.getText());
 
     }
