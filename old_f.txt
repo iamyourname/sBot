@@ -1,0 +1,30 @@
+
+        // old function
+        /*
+        var msg = update.getMessage();
+        var user = msg.getFrom();
+        var id = user.getId();
+
+        if(update.hasMessage() && update.getMessage().hasText()){
+           String message_text = update.getMessage().getText();
+            long chat_id = update.getMessage().getChatId();
+            if (message_text.equals("example")) {
+                try {
+                    execute(SendKeyboard.hermitageInlineKeyboardAb(chat_id));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+            }else if(update.hasCallbackQuery()){
+                String call_data = update.getCallbackQuery().getData();
+                long cchat_id = update.getCallbackQuery().getMessage().getChatId();
+            }
+
+
+        }
+
+        System.out.println(
+                user.getUserName() + "(" + user.getId() + "): " + msg.getText()
+        );
+        logger.info(user.getUserName() + "(" + user.getId() + "): " + msg.getText());
+        sendText(id,msg.getText());
+        */
