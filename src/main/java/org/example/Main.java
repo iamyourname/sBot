@@ -11,9 +11,11 @@ import static org.example.Connections.getAddress;
 public class Main {
     public static void main(String[] args) throws TelegramApiException {
 
+        /*
         if(getAddress()){
             System.out.println("OK");
         }
+        */
 
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         botsApi.registerBot(new Bot());

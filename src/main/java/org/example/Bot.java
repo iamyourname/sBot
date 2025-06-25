@@ -43,11 +43,14 @@ public class Bot extends TelegramLongPollingBot {
             String call_data = update.getCallbackQuery().getData();
             long message_id = update.getCallbackQuery().getMessage().getMessageId();
             long chat_id = update.getCallbackQuery().getMessage().getChatId();
+            var user = update.getCallbackQuery().getMessage().getFrom();
+            var bText = update.getCallbackQuery().getMessage().getText();
 
-            if (call_data.equals("button1")) {
+            if (call_data.equals("addnew")) {
                 // Действие при нажатии на кнопку 1
+
                 executeEditMessageText("Вы нажали кнопку 1", chat_id, message_id);
-            } else if (call_data.equals("button2")) {
+            } else if (call_data.equals("show")) {
                 // Действие при нажатии на кнопку 2
                 executeEditMessageText("Вы нажали кнопку 2", chat_id, message_id);
             }
@@ -82,13 +85,14 @@ public class Bot extends TelegramLongPollingBot {
 
     private void sendInlineKeyboard(long chatId) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
         InlineKeyboardButton button1 = new InlineKeyboardButton();
-        button1.setText("Кнопка 1");
-        button1.setCallbackData("button1");
+        button1.setText("Добавить торрент");
+        button1.setCallbackData("addnew");
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
-        button2.setText("Кнопка 2");
-        button2.setCallbackData("button2");
+        button2.setText("Активные загрузки");
+        button2.setCallbackData("show");
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(button1);
