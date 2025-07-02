@@ -1,15 +1,25 @@
 package org.example;
 
+import org.apache.commons.io.FileUtils;
 import org.example.keyboards.SendKeyboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+//import org.telegram.telegrambots.meta.api.objects.Document;
+import org.telegram.telegrambots.meta.api.objects.Document;
+import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,10 +64,51 @@ public class Bot extends TelegramLongPollingBot {
                 // Действие при нажатии на кнопку 2
                 executeEditMessageText("Вы нажали кнопку 2", chat_id, message_id);
             }
+        }else if(update.getMessage().hasDocument()){
+
+            System.out.println("FILE!");
+            var files = update.getMessage().getDocument();
+            var file_id = files.getFileId();
+            var file_name = files.getFileName();
+            var file_mime = files.getMimeType();
+            var file_size = files.getFileSize();
+            String getID = String.valueOf(update.getMessage().getFrom().getId());
+
+            Document document = new Document();
+            document.setMimeType(file_mime);
+            document.setFileName(file_name);
+            document.setFileSize(file_size);
+            document.setFileId(file_id);
+
+
+            GetFile getFile = new GetFile();
+            getFile.setFileId(document.getFileId());
+
+
+            try {
+                File  file = execute(getFile);
+                downloadFile(file, new java.io.File("./data/userDoc/" + getID + "_" + file_name));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
+
         }
 
     }
+    public File getFilePath(Document document) throws TelegramApiException {
+        GetFile getFile = new GetFile();
+        getFile.setFileId(document.getFileId());
+        File file = execute(getFile);
+        return file;
+    }
+    public void downloadFile(Document document,  String localFilePath) throws IOException, TelegramApiException {
+        File file = getFilePath(document);
 
+        java.io.File localFile = new java.io.File(localFilePath);
+        InputStream is = new URL(file.getFileUrl(getBotToken())).openStream();
+        FileUtils.copyInputStreamToFile(is, localFile);
+    }
     public void sendText(Long who, String what){
         SendMessage sm = SendMessage.builder()
                 .chatId(who.toString()) //Who are we sending a message to
